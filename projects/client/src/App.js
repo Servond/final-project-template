@@ -1,26 +1,23 @@
-import axios from "axios";
-import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
-
+import { Route, Routes } from "react-router-dom";
+import Login from "./pages/login";
+import Home from "./pages/home";
+import { Resetpassword } from "./pages/resetpassword";
+import CekLogin from "./middleware/cekLogin";
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
-  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
-    </div>
+    <>
+      <CekLogin>
+        <Routes>
+          <Route path="/" element={<Login />}></Route>
+          <Route path="/home" element={<Home />}></Route>
+          <Route
+            path="/resetpassword/:token"
+            element={<Resetpassword />}
+          ></Route>
+        </Routes>
+      </CekLogin>
+    </>
   );
 }
 
