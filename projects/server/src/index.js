@@ -2,22 +2,38 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+const path = require("path");
+const db = require("../models");
+// db.sequelize.sync({ alter: true });
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
   cors({
     origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
+      "http://localhost:3000",
+      // process.env.WHITELISTED_DOMAIN &&
+      //   process.env.WHITELISTED_DOMAIN.split(","),
     ],
   })
 );
 
 app.use(express.json());
 
+const {
+  authRouter,
+  productRouter,
+  categoryRouter,
+  transactionRouter,
+} = require("../routers");
+
 //#region API ROUTES
 
+app.use("/api/pos-kasir", authRouter);
+app.use("/api/product", productRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/transaction", transactionRouter);
+app.use("/api/", express.static(path.resolve(__dirname, "../")));
 // ===========================
 // NOTE : Add your routes here
 
